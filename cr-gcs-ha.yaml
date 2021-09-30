@@ -3,7 +3,7 @@ kind: "Vault"
 metadata:
   name: "vault"
 spec:
-  size: 2
+  size: 2 
   image: vault:1.6.2
 #  bankVaultsImage: banzaicloud/bank-vaults:master
 
@@ -14,8 +14,8 @@ spec:
       kmsKeyRing: "vault"
       kmsCryptoKey: "vault-unsealer"
       kmsLocation: "global"
-      kmsProject: "gke-playground-275007" #replace as per the project name
-      storageBucket: "easycars-dev"
+      kmsProject: "<project_name>" #replace with the name of your project
+      storageBucket: "<bucket_name>"
 
   # Specify the ServiceAccount where the Vault Pod and the Bank-Vaults configurer/unsealer is running
   serviceAccount: vault
@@ -26,7 +26,7 @@ spec:
   config:
     storage:
       gcs:
-        bucket: "easycars-dev"
+        bucket: "<bucket_name>"
         ha_enabled: "true"
     listener:
       tcp:
@@ -74,9 +74,9 @@ spec:
               # set create_only=true. Disable when you need to actually apply a change
               create_only: "true"
               secret_type: "service_account_key"
-              project: "gke-playground-275007"  #replace as per the project name
+              project: "<project_name>" #replace with the name of your project
               bindings: |
-                resource "//cloudresourcemanager.googleapis.com/projects/gke-playground-275007" {
+                resource "//cloudresourcemanager.googleapis.com/projects/<project_name>" {
                   roles = ["roles/editor", "roles/iam.securityAdmin", "roles/iam.roleAdmin", "roles/container.admin"]
                 }
   # If you are not using a Service Account to authenticate against GCP you can pass in an
@@ -86,5 +86,5 @@ spec:
   # https://cloud.google.com/docs/authentication/getting-started
   credentialsConfig:
     env: GOOGLE_APPLICATION_CREDENTIALS
-    path: /Users/ayushkumar/Documents/terraform/setup_new_infra_terraform/networking/credentials.json
+    path: <path_to_json_file>
     secretName: gcp-sa
